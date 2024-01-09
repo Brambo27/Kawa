@@ -82,15 +82,11 @@ extension Subject{
             let (data, _) = try await URLSession.shared.data(from: url)
             let result = try JSONDecoder().decode([AssignmentEntity].self, from: data)
             
-            let testAssignments = [Assignment.presentPerfectAssignment]
-            for assignment in testAssignments{ //result
-//                let assignmentModel = try await Assignment(from: assignment)
-//                modelContext.insert(assignmentModel)
-//                assignments.append(assignmentModel)
-                assignment.subject = self
-                modelContext.insert(assignment)
-                assignments.append(assignment)
-                
+            for assignment in result{
+                let assignmentModel = try await Assignment(from: assignment)
+                //TODO: Check if need to add to subject too, as relation
+                modelContext.insert(assignmentModel)
+                assignments.append(assignmentModel)
             }
         }catch {
             print("Can't map assignment: \(error)")
@@ -98,14 +94,4 @@ extension Subject{
 
         return assignments
     }
-}
-
-extension Array where Element == Subject {
-    static let test = [
-        Subject(courseId: 1, courseName: "English", courseDescription: "English Class", teacherName: "Nyange", startDate: Date().adding(days: -14), endDate: Date().adding(days: 60)),
-        Subject(courseId: 2, courseName: "Math", courseDescription: "Math Class", teacherName: "Nyange", startDate: Date().adding(days: -14), endDate: Date().adding(days: 60)),
-        Subject(courseId: 3, courseName: "Science", courseDescription: "Science Class", teacherName: "Nyange", startDate: Date().adding(days: -14), endDate: Date().adding(days: 60)),
-        Subject(courseId: 4, courseName: "History", courseDescription: "History Class", teacherName: "Nyange", startDate: Date().adding(days: -14), endDate: Date().adding(days: 60)),
-        Subject(courseId: 5, courseName: "Geography", courseDescription: "Geography Class", teacherName: "Nyange", startDate: Date().adding(days: -14), endDate: Date().adding(days: 60)),
-    ]
 }

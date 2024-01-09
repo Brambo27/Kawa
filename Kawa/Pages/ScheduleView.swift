@@ -11,6 +11,7 @@ import SwiftData
 struct ScheduleView: View {
     @Environment(\.modelContext) private var modelContext
     @State var currentWeekStartDate: Date = .startOfWeek
+    @Query private var storedSchedule: [ScheduleItem]
     
     var body: some View {
         Frame {
@@ -18,9 +19,9 @@ struct ScheduleView: View {
             
             deadlineList()
             
-            Button(action: {
-                //TODO: Navigate to activities
-            }, label: {
+            NavigationLink {
+                ActivityView()
+            } label: {
                 HStack(alignment: .center, spacing: 8) {
                     Label("Browse activities", systemImage: "ticket")
                         .font(.callout)
@@ -30,17 +31,27 @@ struct ScheduleView: View {
                 .frame(maxWidth: .infinity)
                 .background(Color(red: 0.67, green: 0.93, blue: 0.86))
                 .cornerRadius(4)
-            })
+            }
                                 
             ScheduleList(currentWeekStartDate: currentWeekStartDate)
         }
         .task {
             do {
-//                try await ScheduleItemCollection.fetchSchedule(modelContext: modelContext)
-                ScheduleItem.insertSampleData(modelContext: modelContext)
+                if(storedSchedule.isEmpty){
+                    //try await ScheduleItemCollection.fetchSchedule(modelContext: modelContext)
+                    ScheduleItem.insertSampleData(modelContext: modelContext)
+                }
             }
             catch {
                 print(error)
+            }
+        }
+        .toolbar {
+            Button {
+                ScheduleItem.reloadSampleData(modelContext: modelContext)
+            } label: {
+                Label("", systemImage: "arrow.clockwise")
+                    .help("Reload sample data")
             }
         }
     }

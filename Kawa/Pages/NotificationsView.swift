@@ -14,11 +14,10 @@ struct NotificationsView: View {
     
     var body: some View {
         Frame{
-            Card{
-                ForEach(notifications, id: \.id){ notification in
+            ForEach(notifications, id: \.id){ notification in
+                Card{
                     Text(notification.title)
                 }
-                Text("NotificationsView")
             }
         }
     }

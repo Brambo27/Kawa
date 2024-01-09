@@ -23,6 +23,8 @@ struct Frame<Content:View>: View {
                 content()
             }
             .padding(12)
-        }.background(Color("Background"))
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color("Background"))
     }
 }

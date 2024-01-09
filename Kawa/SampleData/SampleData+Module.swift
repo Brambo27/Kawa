@@ -18,9 +18,14 @@ extension Module {
             modelContext.insert(module2)
             try? modelContext.save()
         }
-    
+        
         Subject.english.module = module1
         Subject.english.openAssignments = [.presentPerfectAssignment]
+        
+//        Adding this crashes the app
+//        Subject.mathematics.module = module1
+//        Subject.computerSkills.module = module1
+
     }
     
     static func reloadSampleData(modelContext: ModelContext) {

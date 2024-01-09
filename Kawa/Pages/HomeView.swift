@@ -175,6 +175,7 @@ struct NextScheduleItem: View {
 }
 
 struct Schedule: View {
+    @Environment(\.modelContext) private var modelContext
     @Query(
         filter: ScheduleItem.predicate(searchDate: Date())
     ) var todaysSchedule: [ScheduleItem]
@@ -205,6 +206,11 @@ struct Schedule: View {
                 } description: {
                     Text("When you have classes scheduled for today they will appear here.")
                 }
+            }
+        }.task {
+            if(todaysSchedule.isEmpty){
+                //try await ScheduleItemCollection.fetchSchedule(modelContext: modelContext)
+                ScheduleItem.insertSampleData(modelContext: modelContext)
             }
         }
     }

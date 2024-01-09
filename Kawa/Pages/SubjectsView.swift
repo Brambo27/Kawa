@@ -11,7 +11,7 @@ import SwiftData
 
 struct SubjectsView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query var modules: [Module]
+    @Query(sort: \Module.id) var modules: [Module]
     
     var body: some View {
         Frame{

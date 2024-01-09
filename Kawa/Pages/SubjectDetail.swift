@@ -49,28 +49,7 @@ struct AssignmentList: View {
     var body: some View {
         ForEach(assignments, id: \.id){ assignment in
             NavigationLink {
-                AssignmentDetail(assignment: assignment){ url in
-                    do{
-                        //TODO: this needs to move somewhere else
-                        let content = try Data.init(contentsOf: url, options: .mappedIfSafe)
-                        let documentsUrl =  FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-                        let destinationUrl = documentsUrl.appendingPathComponent(url.lastPathComponent)
-                        let uploadUrl = URL(string: "https://virtserver.swaggerhub.com/Kawa-V2/Assignment_service/1.0.0/assignments/Upload")
-                        guard let uploadUrl = URL(string: "https://virtserver.swaggerhub.com/Kawa-V2/Assignment_service/1.0.0/assignments/Upload") else {
-                            print("something went wrong")
-                            return
-                        }
-                        print(url.upload(to: uploadUrl))
-                        
-                        //Upload from destinationUrl, delete file after upload
-                        //                        print(destinationUrl.upload(to: uploadUrl))
-                        //                        try content.write(to: destinationUrl)
-                        
-                    }
-                    catch{
-                        print(error)
-                    }
-                }
+                AssignmentDetail(assignment: assignment)
             } label: {
                 AssignmentListItem(assignment: .presentPerfectAssignment)
             }

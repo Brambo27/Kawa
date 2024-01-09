@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Assignment {
-    @Attribute(.unique) var id: Int?
+    @Attribute(.unique) var id: String?
     var name: String
     var deadline: Date
     var assignmentDescription: String
@@ -40,7 +40,7 @@ final class Assignment {
         }
     }
 
-    init(id: Int, name: String, deadline: Date, description: String, userFiles: [File]){
+    init(id: String, name: String, deadline: Date, description: String, userFiles: [File]){
         self.id = id
         self.name = name
         self.deadline = deadline
@@ -59,7 +59,7 @@ extension Assignment {
 }
 
 struct AssignmentEntity: Codable{
-    let id: Int
+    let id: String
     let userId: Int
     let courseId: Int
     let assignmentDescription: String
@@ -71,13 +71,16 @@ struct File: Codable {
     let id: Int
     let userId: Int
     let assignmentFile: String
+    var fileName: String {
+        return String(assignmentFile.split(separator: "/").last ?? "")
+    }
 }
 
 extension Assignment {
     @MainActor
     
     func fetchFiles() async throws -> [File]{
-        guard let url = URL(string: "https://virtserver.swaggerhub.com/Kawa-V2/Assignment_service/1.0.0/assignments/uploaded/\(self.id)") else {
+        guard let url = URL(string: "\(URLs.uploadedAssignmentsUrl)\(self.id)") else {
             print("something went wrong")
             return []//TODO: Figure this out
         }
